@@ -1,18 +1,30 @@
 <template>
-  <div id="boardblock" :style="{ width: widthX + 'px', height: widthY + 'px' }">
-    <table class="board">
-      <tr v-for="row in tiles" :key="row.id" class="row">
-        <div v-for="cell in row.nodes" :key="cell.id" class="cell">
-          <div v-if="cell.state == 0" @click="inspectTile(row.id, cell.id)">
-            <Tile :sizex=largeTileWx(row.length) :sizey=largeTileWy(tiles.length) :luck=0 />
-          </div>
-          <div v-else-if="cell.state == 1 && depth < 6" >
-            <TilesGame :widthX=largeTileWx(row.length) :widthY=largeTileWy(tiles.length) :depth=increment(depth) />
-          </div>
+  <Entity v-model="boardblock" :position="[upperLeftX, upperLeftY, upperLeftZ]">
+  <!-- <div id="boardblock" :style="{ width: widthX + 'px', height: widthY + 'px' }"> -->
+    size:{{widthX}} x {{widthY}}
+    <div v-for="row in tiles" :key="row.id" class="row">
+      <div v-for="cell in row.nodes" :key="cell.id" class="cell" >
+        <div v-if="cell.state == 0" @click="inspectTile(row.id, cell.id)">
+          size:({{row.nodes.length}}, {{tiles.length}}): {{cell.id}}x{{row.id}}
+          <Tile :upperLeftX="tlTileX(cell.id, largeTileSz(row.nodes.length))"
+                :upperLeftY="tlTileY(row.id, largeTileSz(tiles.length))"
+                :upperLeftZ="0"
+                :sizex=largeTileSz(row.nodes.length) 
+                :sizey=largeTileSz(tiles.length) 
+                :luck=0 />
         </div>
-      </tr>
-    </table>
-  </div>
+        <div v-else-if="cell.state == 1 && depth < 6" >
+          <TilesGame :upperLeftX="tlTileX(cell.id, largeTileSz(row.length))"
+                     :upperLeftY="tlTileY(row.id, largeTileSz(tiles.length))"
+                     :upperLeftZ="0" 
+                     :widthX=largeTileSz(row.length) 
+                     :widthY=largeTileSz(tiles.length) 
+                     :depth=increment(depth) />
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+  </Entity>
 </template>
 
 <script>
@@ -26,6 +38,9 @@ export default {
     TilesGame
   },
   props: {
+    upperLeftX: Number,
+    upperLeftY: Number,
+    upperLeftZ: Number,
     widthX: Number,
     widthY: Number,
     depth: Number
@@ -65,6 +80,21 @@ export default {
           })
       }
     },
+
+    tlTileX: function(n, w) {
+      return n*w
+    },
+    tlTileY: function(n, w) {
+      return n*w
+    },
+    largeTileSz: function(n) {
+      if (this.WidthX < this.widthY) {
+        return Math.trunc(this.widthX / n)
+      } else {
+        return Math.trunc(this.widthY / n)
+      }
+
+    },
     largeTileWx: function(n) {
       return Math.trunc(this.widthX / n)
     },
@@ -94,13 +124,17 @@ export default {
 <style scoped>
 .board {
   position: relative;
-  display: table;
+  display: block;
   margin: 0 auto;
 }
-.board .row {
-  display: table-row;
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  clear: all;
 }
-.board .cell {
-  display: table-cell;
+.cell {
+  display: inline-block;
+  margin: 0.25em;
 }
 </style>

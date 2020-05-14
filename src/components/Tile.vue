@@ -1,19 +1,34 @@
 <template>
-    <td class="tile-outer" :style="{ width: sizex + 'px', height: sizey + 'px' }">
+    <div class="tile-outer" :style="{ width: sizex + 'px', height: sizey + 'px' }">
         <div class="tile">
             <div class="tile-inner">
                 <span class="tile-place">
-                    {{ fortune() }}                    
+                    <Box :position="[translateX(upperLeftX), translateY(upperLeftY), upperLeftZ]"></Box>
+                    <!-- <Box :position="[1, 1, 0]"></Box>
+                    <Box :position="[15, 1, 0]"></Box>
+                    <Box :position="[1, 15, 0]"></Box>
+                    <Box :position="[1, 1, 15]"></Box>
+                    <Box :position="[1, 15, 15]"></Box>
+                    <Box :position="[1, 1, 0]"></Box>
+                    <Box :position="[-15, 1, 0]"></Box>
+                    <Box :position="[1, -15, 0]"></Box>
+                    <Box :position="[1, 1, -15]"></Box>
+                    <Box :position="[1, -15, -15]"></Box> -->
+                    {{translateX(upperLeftX)}} x {{translateY(upperLeftY)}} x {{upperLeftZ}} <br/>
+                    ({{sizex}}, {{sizey}})
                 </span>
             </div>
         </div>
-    </td>    
+    </div>    
 </template>
 
 <script>
 export default {
   name: 'TilesGame',
   props: {
+    upperLeftX: Number,
+    upperLeftY: Number,
+    upperLeftZ: Number,
     sizex: Number,
     sizey: Number,
     luck: Number
@@ -21,20 +36,31 @@ export default {
   methods: {
       fortune: function() {
           return "tbd!"
+      },
+      myrandom: function() {
+          return Math.random()
+      },
+      translateX: function(x) {
+          return ((x / 1250) - 0.5) * 200
+      },
+      translateY: function(y) {
+          return ((y / 627) - 0.5) * 200
       }
+
   }
 }
 </script>
 
 <style scoped>
 .tile-outer {
+    display: inline-block;
     margin: 0 auto;
     border-radius:0.25em;
     background-color: #888;    
-    vertical-align: middle;
 }
 
 .tile {
+    position: relative;
     display: block;
     width: 70%;
     height: 70%;
@@ -44,7 +70,7 @@ export default {
 }
 
 .tile-inner {
-    width: 100%;
+    width: 150%;
     display: block;
     top: 45%;
     position: relative;
