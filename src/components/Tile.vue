@@ -1,9 +1,10 @@
 <template>
-    <div class="tile-outer" :style="{ width: sizex + 'px', height: sizey + 'px' }">
+    <div class="tile-outer" :style="{ width: 50 + 'px', height: 150 + 'px' }">
         <div class="tile">
             <div class="tile-inner">
                 <span class="tile-place">
-                    <Box :position="[translateX(upperLeftX), translateY(upperLeftY), upperLeftZ]"></Box>
+                    <Box :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ]"
+                         :scaling="[tilescale(sizex), tilescale(sizey), tilescale(sizex)]"></Box>
                     <!-- <Box :position="[1, 1, 0]"></Box>
                     <Box :position="[15, 1, 0]"></Box>
                     <Box :position="[1, 15, 0]"></Box>
@@ -14,8 +15,8 @@
                     <Box :position="[1, -15, 0]"></Box>
                     <Box :position="[1, 1, -15]"></Box>
                     <Box :position="[1, -15, -15]"></Box> -->
-                    {{translateX(upperLeftX)}} x {{translateY(upperLeftY)}} x {{upperLeftZ}} <br/>
-                    ({{sizex}}, {{sizey}})
+                    {{upperLeftX | decimal4}} x {{upperLeftY | decimal4}} x {{upperLeftZ | decimal4}} <br/>
+                    ({{sizex | decimal4}}, {{sizey | decimal4}})
                 </span>
             </div>
         </div>
@@ -40,13 +41,18 @@ export default {
       myrandom: function() {
           return Math.random()
       },
-      translateX: function(x) {
-          return ((x / 1250) - 0.5) * 200
+      tilescale: function(w) {
+          return w * 0.5;
       },
-      translateY: function(y) {
-          return ((y / 627) - 0.5) * 200
-      }
+      tilepos: function(pos, size) {
+          var ret = pos + size / 2
+          if (ret <= -1)
+            ret = -0.9999;
+          if (ret >= 1)
+            ret = 0.9999;          
+          return pos + size / 2
 
+      }
   }
 }
 </script>

@@ -6,19 +6,19 @@
       <div v-for="cell in row.nodes" :key="cell.id" class="cell" >
         <div v-if="cell.state == 0" @click="inspectTile(row.id, cell.id)">
           size:({{row.nodes.length}}, {{tiles.length}}): {{cell.id}}x{{row.id}}
-          <Tile :upperLeftX="tlTileX(cell.id, largeTileSz(row.nodes.length))"
-                :upperLeftY="tlTileY(row.id, largeTileSz(tiles.length))"
+          <Tile :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
+                :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
                 :upperLeftZ="0"
-                :sizex=largeTileSz(row.nodes.length) 
-                :sizey=largeTileSz(tiles.length) 
+                :sizex="largeTileSz(row.nodes.length, widthX)"
+                :sizey="largeTileSz(tiles.length, widthY)" 
                 :luck=0 />
         </div>
         <div v-else-if="cell.state == 1 && depth < 6" >
-          <TilesGame :upperLeftX="tlTileX(cell.id, largeTileSz(row.length))"
-                     :upperLeftY="tlTileY(row.id, largeTileSz(tiles.length))"
+          <TilesGame :upperLeftX="tilePos(cell.id, largeTileSz(row.length, widthX), upperLeftX)"
+                     :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
                      :upperLeftZ="0" 
-                     :widthX=largeTileSz(row.length) 
-                     :widthY=largeTileSz(tiles.length) 
+                     :widthX="largeTileSz(row.nodes.length, widthX)"
+                     :widthY="largeTileSz(tiles.length, widthY)"
                      :depth=increment(depth) />
         </div>
       </div>
@@ -30,6 +30,8 @@
 <script>
 import Tile from './Tile.vue'
 import TilesGame from './TilesGame.vue'
+
+
 
 export default {
   name: 'TilesGame',
@@ -81,25 +83,11 @@ export default {
       }
     },
 
-    tlTileX: function(n, w) {
-      return n*w
+    tilePos: function(i, size, offs) {
+      return i*size + offs
     },
-    tlTileY: function(n, w) {
-      return n*w
-    },
-    largeTileSz: function(n) {
-      if (this.WidthX < this.widthY) {
-        return Math.trunc(this.widthX / n)
-      } else {
-        return Math.trunc(this.widthY / n)
-      }
-
-    },
-    largeTileWx: function(n) {
-      return Math.trunc(this.widthX / n)
-    },
-    largeTileWy: function(n) {
-      return Math.trunc(this.widthY / n)
+    largeTileSz: function(len, size) {
+        return size/len
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {
