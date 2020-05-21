@@ -3,8 +3,10 @@
         <div class="tile">
             <div class="tile-inner">
                 <span class="tile-place">
-                    <Box :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ]"
-                         :scaling="[tilescale(sizex), tilescale(sizey), tilescale(sizex)]"></Box>
+                  <Entity :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ]">
+                    <Box v-model="myBox"
+                         :position="[0, 0, 0]"
+                         :scaling="[tilescale(sizex), tilescale(sizey), tilescale(sizex * 0.2)]"></Box>
                     <!-- <Box :position="[1, 1, 0]"></Box>
                     <Box :position="[15, 1, 0]"></Box>
                     <Box :position="[1, 15, 0]"></Box>
@@ -17,6 +19,7 @@
                     <Box :position="[1, -15, -15]"></Box> -->
                     {{upperLeftX | decimal4}} x {{upperLeftY | decimal4}} x {{upperLeftZ | decimal4}} <br/>
                     ({{sizex | decimal4}}, {{sizey | decimal4}})
+                  </Entity>
                 </span>
             </div>
         </div>
@@ -27,6 +30,8 @@
 export default {
   name: 'TilesGame',
   props: {
+    iX: Number,
+    iY: Number,
     upperLeftX: Number,
     upperLeftY: Number,
     upperLeftZ: Number,
@@ -52,6 +57,16 @@ export default {
             ret = 0.9999;          
           return pos + size / 2
 
+      }
+  },
+  data() {
+      return {
+          myBox: null,
+      }
+  },
+  watch: {
+      myBox() {
+          
       }
   }
 }

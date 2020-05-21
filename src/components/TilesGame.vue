@@ -1,30 +1,30 @@
 <template>
-  <Entity v-model="boardblock" :position="[upperLeftX, upperLeftY, upperLeftZ]">
-  <!-- <div id="boardblock" :style="{ width: widthX + 'px', height: widthY + 'px' }"> -->
-    size:{{widthX}} x {{widthY}}
+  <!-- <Entity :position="[upperLeftX, upperLeftY, upperLeftZ]"> -->
+  <div id="boardblock" :style="{ width: widthX + 'px', height: widthY + 'px' }">
+    set[{{tiles[0].nodes.length}}, {{tiles.length}}] ratio({{widthX}}, {{widthY}})
     <div v-for="row in tiles" :key="row.id" class="row">
       <div v-for="cell in row.nodes" :key="cell.id" class="cell" >
         <div v-if="cell.state == 0" @click="inspectTile(row.id, cell.id)">
-          size:({{row.nodes.length}}, {{tiles.length}}): {{cell.id}}x{{row.id}}
-          <Tile :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
-                :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
-                :upperLeftZ="0"
-                :sizex="largeTileSz(row.nodes.length, widthX)"
-                :sizey="largeTileSz(tiles.length, widthY)" 
-                :luck=0 />
+          pos[{{cell.id}}, {{row.id}}]
+            <Tile :iX=cell.id :iY=row.id
+                  :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
+                  :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
+                  :upperLeftZ="depthZ(depth)" 
+                  :sizex="largeTileSz(row.nodes.length, widthX)"
+                  :sizey="largeTileSz(tiles.length, widthY)" 
+                  :luck=0 />
         </div>
         <div v-else-if="cell.state == 1 && depth < 6" >
-          <TilesGame :upperLeftX="tilePos(cell.id, largeTileSz(row.length, widthX), upperLeftX)"
+          <TilesGame :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
                      :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
-                     :upperLeftZ="0" 
+                     :upperLeftZ="depthZ(depth)" 
                      :widthX="largeTileSz(row.nodes.length, widthX)"
                      :widthY="largeTileSz(tiles.length, widthY)"
-                     :depth=increment(depth) />
+                     :depth="increment(depth)" />
         </div>
       </div>
     </div>
-  <!-- </div> -->
-  </Entity>
+  </div>
 </template>
 
 <script>
@@ -88,6 +88,9 @@ export default {
     },
     largeTileSz: function(len, size) {
         return size/len
+    },
+    depthZ: function(depth) {
+      return -1/depth;
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {

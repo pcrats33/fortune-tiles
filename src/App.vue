@@ -1,15 +1,21 @@
 <template>
   <div id="app">
-    <h1>Fortune Tiles {{ gameWidth }} x {{ gameHeigth }} </h1>
+    <h1>Fortune Tiles</h1>
     <!-- <canvas id="gfxCanvas"></canvas> -->
     <Scene id="gfxCanvas">
       <DirectionalLight></DirectionalLight>
       <HemisphericLight diffuse="#8AC"></HemisphericLight>
       <PointLight specular="#0F0"></PointLight>
       <SpotLight></SpotLight>
-      <TilesGame :upperLeftX=-1.0 :upperLeftY=-1.0 :upperLeftZ=0 :widthX=2.0 :widthY=2.0 :depth=0 />
+      <Camera :name="myCamera"
+              :type="universal"
+              :position="[0, 0, -100]"
+              :target="[0, 0, 0]"
+      >
+      </Camera>
+      <TilesGame :upperLeftX=-50.0 :upperLeftY=-50.0 :upperLeftZ=0 :widthX=100.0 :widthY=100.0 :depth=1 />
     </Scene>
-      <TilesGame :upperLeftX=-1.0 :upperLeftY=-1.0 :upperLeftZ=0 :widthX=2.0 :widthY=2.0 :depth=0 />
+      <!-- <TilesGame :upperLeftX=-0.5 :upperLeftY=-0.5 :upperLeftZ=0 :widthX=1.0 :widthY=1.0 :depth=1 /> -->
 
   </div>
 </template>
