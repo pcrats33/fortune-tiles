@@ -95,9 +95,9 @@ export default {
     depthZ: function(depth) {
       return -1/depth;
     },
-    openTile() {
-      console.log("tile clicked")
-      // this.inspectTile(pos.Y, pos.X)
+    openTile(pos) {
+      console.log("tile clicked " + pos.x + " x " + pos.y)
+      this.inspectTile(pos.y, pos.x)
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {
