@@ -6,16 +6,18 @@
       <div v-for="cell in row.nodes" :key="cell.id" class="cell" >
         <div v-if="cell.state == 0" @click="inspectTile(row.id, cell.id)">
           pos[{{cell.id}}, {{row.id}}]
-            <Tile :iX=cell.id :iY=row.id
+            <Tile :gfxCanvas="gfxCanvas" :iX=cell.id :iY=row.id
                   :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
                   :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
                   :upperLeftZ="depthZ(depth)" 
                   :sizex="largeTileSz(row.nodes.length, widthX)"
                   :sizey="largeTileSz(tiles.length, widthY)" 
-                  :luck=0 />
+                  :luck=0 
+                  @tilePlucked="openTile($event)" />
         </div>
         <div v-else-if="cell.state == 1 && depth < 6" >
-          <TilesGame :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
+          <TilesGame :gfxCanvas="gfxCanvas"
+                     :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
                      :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
                      :upperLeftZ="depthZ(depth)" 
                      :widthX="largeTileSz(row.nodes.length, widthX)"
@@ -30,7 +32,7 @@
 <script>
 import Tile from './Tile.vue'
 import TilesGame from './TilesGame.vue'
-
+import * as BABYLON from 'babylonjs'
 
 
 export default {
@@ -40,6 +42,7 @@ export default {
     TilesGame
   },
   props: {
+    gfxCanvas: BABYLON.Scene,
     upperLeftX: Number,
     upperLeftY: Number,
     upperLeftZ: Number,
@@ -91,6 +94,10 @@ export default {
     },
     depthZ: function(depth) {
       return -1/depth;
+    },
+    openTile() {
+      console.log("tile clicked")
+      // this.inspectTile(pos.Y, pos.X)
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {

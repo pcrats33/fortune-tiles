@@ -3,7 +3,8 @@
         <div class="tile">
             <div class="tile-inner">
                 <span class="tile-place">
-                  <Entity :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ]">
+                  <Entity v-model="myEntity"
+                            :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ]">
                     <Box v-model="myBox"
                          :position="[0, 0, 0]"
                          :scaling="[tilescale(sizex), tilescale(sizey), tilescale(sizex * 0.2)]"></Box>
@@ -27,9 +28,12 @@
 </template>
 
 <script>
+import * as BABYLON from 'babylonjs'
+
 export default {
   name: 'TilesGame',
   props: {
+    gfxCanvas: BABYLON.Scene,
     iX: Number,
     iY: Number,
     upperLeftX: Number,
@@ -57,17 +61,42 @@ export default {
             ret = 0.9999;          
           return pos + size / 2
 
+      },
+      pluckTile() {
+          console.log('innerPluck')
+        //   this.$emit('tilePlucked', 'hello!' )
+        //   this.$emit('tilePlucked', {x: this.iX, y: this.iY} )
+      },
+      attachPick(dom) {
+          dom.myBox.actionManager = new BABYLON.ActionManager(dom.gfxCanvas)
+          dom.myBox.actionManager.registerAction(
+              new BABYLON.ExecuteCodeAction(
+                  BABYLON.ActionManager.OnPickTrigger,
+                  dom.pluckTile()
+              )
+          );
+        //   dom.myBox.actionManager.registerAction(
+        //     new BABYLON.SetValueAction(
+        //         {
+        //             trigger: BABYLON.ActionManager.OnPickTrigger
+        //         },
+        //         dom.myBox,
+        //         "scaling",
+        //         new BABYLON.Vector3(1.2, 1.2, 1.2)
+        //     )
+        //   );
       }
   },
   data() {
       return {
           myBox: null,
+          myEntity: null,
       }
   },
   watch: {
       myBox() {
-          
-      }
+          this.attachPick(this)
+      },
   }
 }
 </script>

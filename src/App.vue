@@ -1,19 +1,20 @@
 <template>
   <div id="app">
     <h1>Fortune Tiles</h1>
-    <!-- <canvas id="gfxCanvas"></canvas> -->
-    <Scene id="gfxCanvas">
+    <Scene v-model="myScene" @scene="myScene = $event">
       <DirectionalLight></DirectionalLight>
       <HemisphericLight diffuse="#8AC"></HemisphericLight>
       <PointLight specular="#0F0"></PointLight>
       <SpotLight></SpotLight>
-      <Camera :name="myCamera"
-              :type="universal"
-              :position="[0, 0, -100]"
-              :target="[0, 0, 0]"
-      >
+      <Camera v-model="myCamera">
       </Camera>
-      <TilesGame :upperLeftX=-50.0 :upperLeftY=-50.0 :upperLeftZ=0 :widthX=100.0 :widthY=100.0 :depth=1 />
+      <TilesGame :gfxCanvas="myScene" 
+                 :upperLeftX=-50.0 
+                 :upperLeftY=-50.0 
+                 :upperLeftZ=0 
+                 :widthX=100.0 
+                 :widthY=100.0 
+                 :depth=1 />
     </Scene>
       <!-- <TilesGame :upperLeftX=-0.5 :upperLeftY=-0.5 :upperLeftZ=0 :widthX=1.0 :widthY=1.0 :depth=1 /> -->
 
@@ -22,15 +23,13 @@
 
 <script>
 import TilesGame from './components/TilesGame.vue'
+import * as BABYLON from 'babylonjs'
 
 export default {
   name: 'App',
   components: {
     TilesGame
   },
-  // mounted () {
-  //   this.runWebGL()
-  // },
   computed: {
     gameWidth: function() {
       return Math.trunc(window.innerWidth * 0.8)
@@ -39,6 +38,23 @@ export default {
       return Math.trunc(window.innerHeight * 0.6)
     }
   },
+  data() {
+    return {
+      myScene: null,
+      myCamera: null,
+      camerastart: Number,
+    }
+  },
+  watch: {
+    myCamera() {
+      this.myCamera.position = new BABYLON.Vector3(0, 0, -100)
+      this.myCamera.cameraDirection = new BABYLON.Vector3(0, 0, 0)
+    },
+    myScene() {
+      console.log("scene loaded");
+    }
+  },
+
 }
 </script>
 
