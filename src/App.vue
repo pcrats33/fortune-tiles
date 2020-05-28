@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>Fortune Tiles</h1>
+    <img src="./assets/switch-camera.png" @click="reverseCamera" class="iconbutton">
     <Scene v-model="myScene" @scene="myScene = $event">
       <DirectionalLight></DirectionalLight>
       <HemisphericLight diffuse="#8AC"></HemisphericLight>
@@ -54,6 +55,11 @@ export default {
       console.log("scene loaded");
     }
   },
+  methods: {
+    reverseCamera() {
+      this.myCamera.rotate(BABYLON.Axis.Y, Math.PI/2, BABYLON.Space.LOCAL)
+    }
+  }
 
 }
 </script>
@@ -72,5 +78,12 @@ export default {
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+.iconbutton {
+  display: inline-block;
+  width: 60px;
+  margin: 0 2% 0 90%;
+  padding: 0;
 }
 </style>

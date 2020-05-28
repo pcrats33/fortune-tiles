@@ -100,8 +100,19 @@ export default {
       return -1/depth;
     },
     openTile(pos) {
-      console.log("tile clicked " + pos.x + " x " + pos.y)
+      // console.log("tile clicked " + pos.x + " x " + pos.y)
       this.inspectTile(pos.y, pos.x)
+      let camera = this.gfxCanvas.activeCamera;
+      BABYLON.Animation.CreateAndStartAnimation(
+        "slideIn",
+        camera,
+        "position",
+        60,
+        4 * 60,
+        camera.position,
+        new BABYLON.Vector3(pos.actualX, pos.actualY, pos.actualZ),
+        0
+    );
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {

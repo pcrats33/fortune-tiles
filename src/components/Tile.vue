@@ -53,7 +53,13 @@ export default {
               new BABYLON.ExecuteCodeAction(
                   BABYLON.ActionManager.OnPickTrigger,
                   () => {
-                      this.$emit('tilePlucked', {x: this.iX, y: this.iY} )
+                      this.$emit('tilePlucked', {
+                        x: this.iX, 
+                        y: this.iY,
+                        actualX: this.tilepos(this.upperLeftX, this.sizex), 
+                        actualY: this.tilepos(this.upperLeftY, this.sizey), 
+                        actualZ: this.upperLeftZ * 20
+                        } )
                   })              
           );
         //   dom.myBox.actionManager.registerAction(
