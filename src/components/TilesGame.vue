@@ -1,12 +1,15 @@
 <template>
-  <!-- <Entity :position="[upperLeftX, upperLeftY, upperLeftZ]"> -->
-  <div id="boardblock" :style="{ width: widthX + 'px', height: widthY + 'px' }">
-    set[{{tiles[0].nodes.length}}, {{tiles.length}}] ratio({{widthX}}, {{widthY}})
-    <div v-for="row in tiles" :key="row.id" class="row">
-      <div v-for="cell in row.nodes" :key="cell.id" class="cell" >
-        <div v-if="cell.state == 0" @click="inspectTile(row.id, cell.id)">
-          pos[{{cell.id}}, {{row.id}}]
-            <Tile :gfxCanvas="gfxCanvas" :iX=cell.id :iY=row.id
+  <div id="boardblock">
+    <!-- widthX: width of this (sub)-board, also height
+         tiles[0].nodes.length: tileMax-X
+         tiles.length: tileMax-Y
+    -->
+    <template v-for="row in tiles">
+      <template v-for="cell in row.nodes">
+        <template v-if="cell.state == 0">
+          <!-- pos[{{cell.id}}, {{row.id}}] -->
+            <Tile :key="row.id+'-'+cell.id"
+                  :gfxCanvas="gfxCanvas" :iX=cell.id :iY=row.id
                   :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
                   :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
                   :upperLeftZ="depthZ(depth)" 
@@ -14,18 +17,19 @@
                   :sizey="largeTileSz(tiles.length, widthY)" 
                   :luck=0 
                   @tilePlucked="openTile($event)" />
-        </div>
-        <div v-else-if="cell.state == 1 && depth < 6" >
-          <TilesGame :gfxCanvas="gfxCanvas"
+        </template>
+        <template v-else-if="cell.state == 1 && depth < 6" >
+          <TilesGame :key="row.id+'-'+cell.id"
+                     :gfxCanvas="gfxCanvas"
                      :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
                      :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
                      :upperLeftZ="depthZ(depth)" 
                      :widthX="largeTileSz(row.nodes.length, widthX)"
                      :widthY="largeTileSz(tiles.length, widthY)"
                      :depth="increment(depth)" />
-        </div>
-      </div>
-    </div>
+        </template>
+      </template>
+    </template>
   </div>
 </template>
 

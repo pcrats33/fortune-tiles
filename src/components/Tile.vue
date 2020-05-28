@@ -1,30 +1,15 @@
 <template>
-    <div class="tile-outer" :style="{ width: 50 + 'px', height: 150 + 'px' }">
-        <div class="tile">
-            <div class="tile-inner">
-                <span class="tile-place">
-                  <Entity v-model="myEntity"
-                            :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ * 20]">
-                    <Box v-model="myBox"
-                         :position="[0, 0, 0]"
-                         :scaling="[tilescale(sizex), tilescale(sizey), tilescale(sizex * 0.2)]"></Box>
-                    <!-- <Box :position="[1, 1, 0]"></Box>
-                    <Box :position="[15, 1, 0]"></Box>
-                    <Box :position="[1, 15, 0]"></Box>
-                    <Box :position="[1, 1, 15]"></Box>
-                    <Box :position="[1, 15, 15]"></Box>
-                    <Box :position="[1, 1, 0]"></Box>
-                    <Box :position="[-15, 1, 0]"></Box>
-                    <Box :position="[1, -15, 0]"></Box>
-                    <Box :position="[1, 1, -15]"></Box>
-                    <Box :position="[1, -15, -15]"></Box> -->
-                    {{upperLeftX | decimal4}} x {{upperLeftY | decimal4}} x {{upperLeftZ | decimal4}} <br/>
-                    ({{sizex | decimal4}}, {{sizey | decimal4}})
-                  </Entity>
-                </span>
-            </div>
-        </div>
-    </div>    
+    <!-- :style="{ width: 50 + 'px', height: 150 + 'px' }" -->
+    <Entity v-model="myEntity"
+            :position="[tilepos(upperLeftX, sizex), tilepos(upperLeftY, sizey), upperLeftZ * 20]">
+        <Box v-model="myBox"
+                :position="[0, 0, 0]"
+                :scaling="[tilescale(sizex), tilescale(sizey), tilescale(sizex * 0.2)]"></Box>
+        <!-- 
+            {{upperLeftX | decimal4}} x {{upperLeftY | decimal4}} x {{upperLeftZ | decimal4}} <br/>
+            ({{sizex | decimal4}}, {{sizey | decimal4}}) 
+        -->
+    </Entity>
 </template>
 
 <script>
