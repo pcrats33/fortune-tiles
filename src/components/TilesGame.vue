@@ -46,7 +46,7 @@ export default {
     TilesGame
   },
   props: {
-    gfxCanvas: BABYLON.Scene,
+    gfxCanvas: Object,
     upperLeftX: Number,
     upperLeftY: Number,
     upperLeftZ: Number,
@@ -97,7 +97,7 @@ export default {
         return size/len
     },
     depthZ: function(depth) {
-      return -1/depth;
+      return 0.8 * depth;
     },
     openTile(pos) {
       // console.log("tile clicked " + pos.x + " x " + pos.y)
@@ -112,7 +112,32 @@ export default {
         camera.position,
         new BABYLON.Vector3(pos.actualX, pos.actualY, pos.actualZ),
         0
-    );
+        // BABYLON.EasingFunction.CircleEase,
+        // () => {
+        //     BABYLON.Animation.CreateAndStartAnimation(
+        //       "rotate",
+        //       this.gfxCanvas.activeCamera,
+        //       "rotation",
+        //       60,
+        //       4 * 60,
+        //       this.gfxCanvas.activeCamera.rotation,
+        //       new BABYLON.Vector3(0, 0, 0),
+        //       0
+        //     );    
+        // }
+      );
+      
+        BABYLON.Animation.CreateAndStartAnimation(
+              "rotate",
+              this.gfxCanvas.activeCamera,
+              "rotation",
+              60,
+              4 * 60,
+              this.gfxCanvas.activeCamera.rotation,
+              new BABYLON.Vector3(0, 0, 0),
+              0,
+              BABYLON.EasingFunction.BackEase
+            );  
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {

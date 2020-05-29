@@ -49,7 +49,8 @@ export default {
   watch: {
     myCamera() {
       this.myCamera.position = new BABYLON.Vector3(0, 0, -100)
-      this.myCamera.cameraDirection = new BABYLON.Vector3(0, 0, 0)
+      this.myCamera.cameraDirection = new BABYLON.Vector3(0, 0, 4)
+      this.myCamera.rotation = new BABYLON.Vector3(this.myCamera.rotation.x,this.myCamera.rotation.y,this.myCamera.rotation.z);
     },
     myScene() {
       console.log("scene loaded");
@@ -57,7 +58,32 @@ export default {
   },
   methods: {
     reverseCamera() {
-      this.myCamera.rotate(BABYLON.Axis.Y, Math.PI/2, BABYLON.Space.LOCAL)
+      console.log("clicked reverse");
+      // this.myCamera.cameraRotation(Math.PI/2, 0);
+      // let arcCamera = new BABYLON.ArcRotateCamera("rotateCamera",
+      //                                             -Math.PI/2,
+      //                                               Math.PI/2,
+      //                                               10,
+      //                                               new BABYLON.Vector3(0,0,0), 
+      //                                               this.myScene);
+      // this.myScene.activeCamera.detachControl(canvas);
+      // this.myScene.activeCamera = arcCamera;
+      // this.myCamera.rotation = new BABYLON.Vector3(this.myCamera.rotation.x,this.myCamera.rotation.y,this.myCamera.rotation.z);
+
+      BABYLON.Animation.CreateAndStartAnimation(
+        "rotate",
+        this.myCamera,
+        "rotation",
+        60,
+        4 * 60,
+        this.myCamera.rotation,
+        new BABYLON.Vector3(this.myCamera.rotation.x,this.myCamera.rotation.y + Math.PI,this.myCamera.rotation.z),
+        0
+      );
+      // this.myCamera.ArcRotateCamera("Camera", 
+      //                       Math.PI/2, 0, 
+      //                       BABYLON.Vector3.Distance(this.myCamera.position, this.myCamera.cameraDirection),
+      //                       this.myCamera.cameraDirection, this.myScene)
     }
   }
 

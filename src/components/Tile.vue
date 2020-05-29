@@ -18,7 +18,7 @@ import * as BABYLON from 'babylonjs'
 export default {
   name: 'TilesGame',
   props: {
-    gfxCanvas: BABYLON.Scene,
+    gfxCanvas: Object,
     iX: Number,
     iY: Number,
     upperLeftX: Number,
