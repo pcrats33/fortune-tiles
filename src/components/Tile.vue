@@ -39,11 +39,6 @@ export default {
           return w * 0.5;
       },
       tilepos: function(pos, size) {
-          var ret = pos + size / 2
-          if (ret <= -1)
-            ret = -0.9999;
-          if (ret >= 1)
-            ret = 0.9999;          
           return pos + size / 2
 
       },
@@ -58,7 +53,7 @@ export default {
                         y: this.iY,
                         actualX: this.tilepos(this.upperLeftX, this.sizex), 
                         actualY: this.tilepos(this.upperLeftY, this.sizey), 
-                        actualZ: this.upperLeftZ * 20
+                        actualZ: this.upperLeftZ
                         } )
                   })              
           );

@@ -10,22 +10,22 @@
           <!-- pos[{{cell.id}}, {{row.id}}] -->
             <Tile :key="row.id+'-'+cell.id"
                   :gfxCanvas="gfxCanvas" :iX=cell.id :iY=row.id
-                  :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
-                  :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
+                  :upperLeftX="tilePos(cell.id, largeTileSz(widthX, row.nodes.length), upperLeftX)"
+                  :upperLeftY="tilePos(row.id, largeTileSz(widthY, tiles.length), upperLeftY)"
                   :upperLeftZ="depthZ(depth)" 
-                  :sizex="largeTileSz(row.nodes.length, widthX)"
-                  :sizey="largeTileSz(tiles.length, widthY)" 
+                  :sizex="largeTileSz(widthX, row.nodes.length)"
+                  :sizey="largeTileSz(widthY, tiles.length)" 
                   :luck=0 
                   @tilePlucked="openTile($event)" />
         </template>
         <template v-else-if="cell.state == 1 && depth < 6" >
           <TilesGame :key="row.id+'-'+cell.id"
                      :gfxCanvas="gfxCanvas"
-                     :upperLeftX="tilePos(cell.id, largeTileSz(row.nodes.length, widthX), upperLeftX)"
-                     :upperLeftY="tilePos(row.id, largeTileSz(tiles.length, widthY), upperLeftY)"
+                     :upperLeftX="tilePos(cell.id, largeTileSz(widthX, row.nodes.length), upperLeftX)"
+                     :upperLeftY="tilePos(row.id, largeTileSz(widthY, tiles.length), upperLeftY)"
                      :upperLeftZ="depthZ(depth)" 
-                     :widthX="largeTileSz(row.nodes.length, widthX)"
-                     :widthY="largeTileSz(tiles.length, widthY)"
+                     :widthX="largeTileSz(widthX, row.nodes.length)"
+                     :widthY="largeTileSz(widthY, tiles.length)"
                      :depth="increment(depth)" />
         </template>
       </template>
@@ -93,16 +93,25 @@ export default {
     tilePos: function(i, size, offs) {
       return i*size + offs
     },
-    largeTileSz: function(len, size) {
+    largeTileSz: function(size, len) {
         return size/len
     },
     depthZ: function(depth) {
       return 0.8 * depth;
     },
     openTile(pos) {
-      // console.log("tile clicked " + pos.x + " x " + pos.y)
-      this.inspectTile(pos.y, pos.x)
+      let zdepth = pos.actualZ;
       let camera = this.gfxCanvas.activeCamera;
+      // console.log("tile clicked " + pos.x + " x " + pos.y)
+      this.inspectTile(pos.y, pos.x);
+      console.log(this.depth)
+      let asize = this.tiles[0].nodes.length
+      let size = this.largeTileSz(this.widthX * 1.10, asize) / 40
+      let tan = Math.tan(camera.fov / 2)
+      let zoffs = size / tan
+      zdepth += 0.8
+      zdepth -= zoffs
+
       BABYLON.Animation.CreateAndStartAnimation(
         "slideIn",
         camera,
@@ -110,21 +119,8 @@ export default {
         60,
         4 * 60,
         camera.position,
-        new BABYLON.Vector3(pos.actualX, pos.actualY, pos.actualZ),
+        new BABYLON.Vector3(pos.actualX, pos.actualY, zdepth * 20),
         0
-        // BABYLON.EasingFunction.CircleEase,
-        // () => {
-        //     BABYLON.Animation.CreateAndStartAnimation(
-        //       "rotate",
-        //       this.gfxCanvas.activeCamera,
-        //       "rotation",
-        //       60,
-        //       4 * 60,
-        //       this.gfxCanvas.activeCamera.rotation,
-        //       new BABYLON.Vector3(0, 0, 0),
-        //       0
-        //     );    
-        // }
       );
       
         BABYLON.Animation.CreateAndStartAnimation(
