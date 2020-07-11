@@ -18,7 +18,7 @@
                   :luck=0 
                   @tilePlucked="openTile($event)" />
         </template>
-        <template v-else-if="cell.state == 1 && depth < 6" >
+        <template v-else-if="cell.state == 1 && depth < maxDepth" >
           <TilesGame :key="row.id+'-'+cell.id"
                      :gfxCanvas="gfxCanvas"
                      :upperLeftX="tilePos(cell.id, largeTileSz(widthX, row.nodes.length), upperLeftX)"
@@ -111,18 +111,17 @@ export default {
       let zoffs = size / tan
       zdepth += 0.8
       zdepth -= zoffs
-
-      BABYLON.Animation.CreateAndStartAnimation(
-        "slideIn",
-        camera,
-        "position",
-        60,
-        4 * 60,
-        camera.position,
-        new BABYLON.Vector3(pos.actualX, pos.actualY, zdepth * 20),
-        0
-      );
-      
+      if (this.depth < this.maxDepth) {
+        BABYLON.Animation.CreateAndStartAnimation(
+          "slideIn",
+          camera,
+          "position",
+          60,
+          4 * 60,
+          camera.position,
+          new BABYLON.Vector3(pos.actualX, pos.actualY, zdepth * 20),
+          0
+        );      
         BABYLON.Animation.CreateAndStartAnimation(
               "rotate",
               this.gfxCanvas.activeCamera,
@@ -133,7 +132,8 @@ export default {
               new BABYLON.Vector3(0, 0, 0),
               0,
               BABYLON.EasingFunction.BackEase
-            );  
+        );  
+      }
     },
     inspectTile: function(rowId, cellId) {
       var row = this.tiles.filter(function(rows) {
@@ -146,6 +146,11 @@ export default {
     },
     increment: function(x) {
       return x + 1
+    }
+  },
+  computed: {
+    maxDepth() {
+      return 3
     }
   },
   created() {
