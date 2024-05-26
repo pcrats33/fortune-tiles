@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'TilesGame',
+  name: 'Tile',
   props: {
     sizex: Number,
     sizey: Number,
